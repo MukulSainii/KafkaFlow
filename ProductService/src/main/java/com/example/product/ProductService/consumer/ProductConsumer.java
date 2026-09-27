@@ -1,11 +1,16 @@
 package com.example.product.ProductService.consumer;
 
 import com.example.product.ProductService.modal.Order;
+import com.example.product.ProductService.modal.ProductReserved;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import com.example.product.ProductService.producer.ProductProducer;
 
 @Service
 public class ProductConsumer {
+    @Autowired
+    private ProductProducer productProducer;
     @KafkaListener(
             topics = "order-events",
             groupId = "product-service"
@@ -27,6 +32,10 @@ public class ProductConsumer {
                         + order.getQuantity()
         );
 
-        // Product reservation logic here
+        ProductReserved paymentEvent = new ProductReserved(
+                order.getOrderId(),
+                order.getProductId()
+        );
+        productProducer.sendProductReserved(paymentEvent);
     }
 }

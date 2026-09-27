@@ -4,6 +4,9 @@ public class ProductReserved {
     private String orderId;
     private String productId;
 
+    public ProductReserved() {
+    }
+
     public ProductReserved(String orderId, String productId) {
         this.orderId = orderId;
         this.productId = productId;
